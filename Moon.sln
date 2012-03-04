@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moon", "Moon\Moon.csproj", "{B98ACA31-75C9-4826-8F98-CAC9E463A342}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6CB5490E-0A87-441A-A922-4A7117D5E305}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		Moon.vsmdi = Moon.vsmdi
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moon.WPF", "Moon.WPF\Moon.WPF.csproj", "{9294E272-D19E-4A18-A44C-7C3BE8061213}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moon.Test", "Moon.Test\Moon.Test.csproj", "{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Moon.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Publish|Any CPU = Publish|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Publish|Any CPU.Build.0 = Publish|Any CPU
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.Build.0 = Publish|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

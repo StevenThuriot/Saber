@@ -1,0 +1,138 @@
+﻿namespace Moon.Settings
+{
+	///<summary>
+	/// Interface for easily making the Moon Framework multilanguage.
+	///</summary>
+	public interface IMoonMultilanguage
+	{
+		///<summary>
+		/// Looks up a string similar to "]".
+		///</summary>
+		string DatamemberBracketClose { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "[".
+		/// </summary>
+		string DatamemberBracketOpen { get; }
+
+		/// <summary>
+		///   Looks up a string similar to " = ".
+		/// </summary>
+		string DatamemberEquals { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Some of the passed Guids are empty".
+		/// </summary>
+		string EmptyGuids { get; }
+
+		/// <summary>
+		///   Looks up a string similar to ".".
+		/// </summary>
+		string EndOfSentence { get; }
+
+		/// <summary>
+		///   Looks up a string similar to ", ".
+		/// </summary>
+		string ErrorSeparator { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to "Exception of type {0} should have been thrown".
+		/// </summary>
+		string ExceptionNotThrown { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Class: {0} - Method: {1} - {2}".
+		/// </summary>
+		string GuardErrorMessageBase { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Args: {0}".
+		/// </summary>
+		string GuardErrorMessage { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Not all arguments can not be converted to Guids".
+		/// </summary>
+		string GuidParseError { get; }
+		
+		/// <summary>
+		///   Looks up a string similar to "Not all booleans are false".
+		/// </summary>
+		string IsFalse { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Not all booleans are true".
+		/// </summary>
+		string IsTrue { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to "A type was passed that wasn't serializable".
+		/// </summary>
+		string IsSerializable { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "No arguments".
+		/// </summary>
+		string NoArguments { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Not all passed dates are in the future".
+		/// </summary>
+		string NotAllDatesAreInTheFuture { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Not all passed dates are in the past".
+		/// </summary>
+		string NotAllDatesAreInThePast { get; }
+
+		///<summary>
+		/// Looks up a string similar to "Some of the passed arguments aren't compliant with the given expression".
+		///</summary>
+		string NotCompliant { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "NULL, empty or whitespace has been passed".
+		/// </summary>
+		string NullEmptyOrWhiteSpaceHasBeenPassed { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "NULL has been passed".
+		/// </summary>
+		string NullHasBeenPassed { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "NULL".
+		/// </summary>
+		string NullValue { get; }
+
+		/// <summary>
+		///   Looks up a string similar to ": ".
+		/// </summary>
+		string SentenceSeparator { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "The start datetime is after or equal to end datetime".
+		/// </summary>
+		string StartBeforeEndDate { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Type {0} can not be assigned to {1}".
+		/// </summary>
+		string TypeCannotBeAssigned { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "Type {0} can not be assigned to {1}: interface is not implemented".
+		/// </summary>
+		string TypeCannotBeAssignedInterface { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "An exception of the wrong type was thrown.\n\nExpected: {0}\nActual: {1}".
+		/// </summary>
+		string WrongException { get; }
+
+		/// <summary>
+		///   Looks up a string similar to "The exception messages are not equal.\n\nExpected: {0}\nActual: {1}".
+		/// </summary>
+		string WrongMessage { get; }
+	}
+}

@@ -22,6 +22,49 @@ namespace Moon.Extensions
 			return enumerable.ToList().AsReadOnly();
 		}
 
+		/// <summary>
+		/// Adds the item in case it's not already present in the list using the default equality comparer.
+		/// </summary>
+		/// <typeparam name="T">The type of item to add.</typeparam>
+		/// <param name="enumerable">The enumerable to add it to.</param>
+		/// <param name="value">The value to add.</param>
+		public static void AddUnique<T>(this ICollection<T> enumerable, T value)
+		{
+			enumerable.AddUnique(value, EqualityComparer<T>.Default);
+		}
+
+		/// <summary>
+		/// Adds the item in case it's not already present in the list.
+		/// </summary>
+		/// <typeparam name="T">The type of item to add.</typeparam>
+		/// <param name="enumerable">The enumerable to add it to.</param>
+		/// <param name="value">The value to add.</param>
+		/// <param name="comparer">The comparer to use.</param>
+		public static void AddUnique<T>(this ICollection<T> enumerable, T value, IEqualityComparer<T> comparer)
+		{
+			if (!enumerable.Contains(value, comparer))
+			{
+				enumerable.Add(value);
+			}
+		}
+
+		/// <summary>
+		/// Adds the passed items to the enumerable.
+		/// </summary>
+		/// <typeparam name="T">The type of item to add.</typeparam>
+		/// <param name="enumerable">The enumerable to add it to.</param>
+		/// <param name="values">The values to add.</param>
+		public static void AddRange<T>(this ICollection<T> enumerable, IEnumerable<T> values)
+		{
+			if (values == null)
+				return;
+
+			foreach (var item in values)
+			{
+				enumerable.AddUnique(item);
+			}
+		}
+
     	/// <summary>
 		/// Transforms array of structs into an array of objects.
 		/// </summary>
@@ -70,7 +113,29 @@ namespace Moon.Extensions
 			{
 			}
 		}
-		
+
+		/// <summary>
+		/// Converts an IEnumerable to a type of choice.
+		/// </summary>
+		/// <typeparam name="TItem">The type of item.</typeparam>
+		/// <typeparam name="TList">The type of list to convert to.</typeparam>
+		/// <param name="enumerable">The original values.</param>
+		/// <returns>A list of type TList, with all the values from the original list.</returns>
+		public static TList ConvertTo<TItem, TList>(this IEnumerable<TItem> enumerable)
+			where TList : ICollection<TItem>, new()
+		{
+			var list = new TList();
+
+			if (enumerable != null)
+			{
+				foreach (var value in enumerable)
+				{
+					list.Add(value);
+				}
+			}
+
+			return list;
+		}
 
 		///<summary>
 		/// Counts a list, keeping in mind the check you are planning to do on it. 

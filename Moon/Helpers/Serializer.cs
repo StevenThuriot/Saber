@@ -20,7 +20,7 @@ namespace Moon.Helpers
 		public static void Serialize<T>(T value, FileInfo file)
 		{
 			Guard.NotNull(value, file);
-			Guard.IsSerializable(typeof(T));
+			Guard.Serializable(typeof(T));
 
 			using (var stream = File.OpenWrite(file.FullName))
 			{
@@ -40,7 +40,7 @@ namespace Moon.Helpers
 		public static T Deserialize<T>(FileInfo file)
 		{
 			Guard.NotNull(file);
-			Guard.IsSerializable(typeof(T));
+			Guard.Serializable(typeof(T));
 
 			object deserializedObject = null;
 

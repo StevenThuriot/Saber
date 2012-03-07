@@ -90,6 +90,14 @@ namespace Moon.Settings
 		}
 
 		/// <summary>
+		///   Looks up a localized string similar to An invalid email has been passed..
+		/// </summary>
+		public string InvalidEmail
+		{
+			get { return MoonRes.InvalidEmail; }
+		}
+
+		/// <summary>
 		///   Looks up a string similar to "Not all booleans are false".
 		/// </summary>
 		public string IsFalse
@@ -103,6 +111,22 @@ namespace Moon.Settings
 		public string IsTrue
 		{
 			get { return MoonRes.IsTrue; }
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to "Negative numbers have been passed.".
+		/// </summary>
+		public string NegativeNumbers
+		{
+			get { return MoonRes.NegativeNumbers; }
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to "Negative numbers or zero have been passed.".
+		/// </summary>
+		public string NegativeNumbersOrZero
+		{
+			get { return MoonRes.NegativeNumbersOrZero; }
 		}
 
 		/// <summary>
@@ -167,6 +191,22 @@ namespace Moon.Settings
 		public string NullValue
 		{
 			get { return MoonRes.NullValue; }
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to "Positive numbers have been passed.".
+		/// </summary>
+		public string PositiveNumbers
+		{
+			get { return MoonRes.PositiveNumbers; }
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Positive numbers or zero have been passed..
+		/// </summary>
+		public string PostiveNumbersOrZero
+		{
+			get { return MoonRes.PostiveNumbersOrZero; }
 		}
 
 		/// <summary>

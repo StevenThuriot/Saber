@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
+using Moon.Helpers;
 
 namespace Moon.Extensions
 {
@@ -64,9 +64,33 @@ namespace Moon.Extensions
         ///<param name="value">The e-mail address.</param>
         ///<returns>True if valid</returns>
         public static bool IsValidEmailAddress(this string value)
-        {
-            return new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$").IsMatch(value);
+    	{
+    		return Guard.ValidEmailRegex.IsMatch(value);
         }
+
+		/// <summary>
+		/// Takes characters from the left side of the string, with a maximum of string.length.
+		/// </summary>
+		/// <param name="value">The string to take characters from.</param>
+		/// <param name="length">The amount of characters to take.</param>
+		/// <returns>A new string with the specified length.</returns>
+		public static string Left(this string value, int length)
+		{
+			Guard.StrictPositive(length);
+			return value == null ? null : value.Substring(0, Math.Min(length, value.Length));
+		}
+
+		/// <summary>
+		/// Takes characters from the right side of the string.
+		/// </summary>
+		/// <param name="value">The string to take characters from.</param>
+		/// <param name="length">The amount of characters to take.</param>
+		/// <returns>A new string with the specified length.</returns>
+		public static string Right(this string value, int length)
+		{
+			Guard.StrictPositive(length);
+			return value == null ? null : value.Substring(Math.Max(value.Length - length, 0));
+		}
 
         ///<summary>
         /// Reverses the given string.
@@ -91,7 +115,32 @@ namespace Moon.Extensions
             return value.IsNullOrWhiteSpace()
                            ? value
 						   : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
-        }
+        }       
+		
+		/// <summary>
+		/// Convert the string to an enum of the given type
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="target">The target.</param>
+		/// <param name="defaultValue">The default value.</param>
+		/// <returns>An enumeration of type T</returns>
+		public static T ToEnum<T>(this string target, T defaultValue) where T : IComparable, IFormattable
+		{
+			var convertedValue = defaultValue;
+
+			if (!string.IsNullOrEmpty(target))
+			{
+				try
+				{
+					convertedValue = (T)Enum.Parse(typeof(T), target.Trim(), true);
+				}
+				catch (ArgumentException)
+				{
+				}
+			}
+
+			return convertedValue;
+		}
 
         /// <summary>
         /// Gets the trimmed value of the string.

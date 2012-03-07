@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Moon.Exceptions;
 using Moon.Extensions;
 
@@ -17,6 +18,8 @@ namespace Moon.Helpers
 	[DebuggerDisplay("Moon's Guard. Usage of reflection is set currently to {UseReflection}")]
     public static class Guard
     {
+    	internal static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
+
     	private static bool _UseReflection = true;
     	///<summary>
 		/// When set to false, the extra information gathering about the calling method (using reflection) will be turned off.
@@ -141,6 +144,150 @@ namespace Moon.Helpers
         	}
         }
 
+		/// <summary>
+		/// Checks if all passed arguments are positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Positive(params int[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x < 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictPositive(params int[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x <= 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Negative(params int[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x > 0))
+			{
+				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictNegative(params int[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x >= 0))
+			{
+				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Positive(params decimal[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x < 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictPositive(params decimal[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x <= 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Negative(params decimal[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x > 0))
+			{
+				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictNegative(params decimal[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x >= 0))
+			{
+				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Positive(params double[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x < 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict positive.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictPositive(params double[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x <= 0))
+			{
+				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void Negative(params double[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x > 0))
+			{
+				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
+			}
+		}
+
+		/// <summary>
+		/// Checks if all passed arguments are strict negative.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void StrictNegative(params double[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => x >= 0))
+			{
+				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
+			}
+		}
+
     	/// <summary>
         /// Checks the dates to ensure they are in the future.
         /// </summary>
@@ -176,7 +323,7 @@ namespace Moon.Helpers
 		///</summary>
 		///<param name="arguments">A list of booleans.</param>
 		///<exception cref="MoonGuardException">Some of the booleans are false.</exception>
-		public static void IsTrue(params bool[] arguments)
+		public static void True(params bool[] arguments)
 		{
 			if (arguments == null || arguments.Any(x => !x))
 			{
@@ -189,7 +336,7 @@ namespace Moon.Helpers
 		///</summary>
 		///<param name="arguments">A list of booleans.</param>
 		///<exception cref="MoonGuardException">Some of the booleans are true.</exception>
-		public static void IsFalse(params bool[] arguments)
+		public static void False(params bool[] arguments)
 		{
 			if (arguments == null || arguments.Any(x => x))
 			{
@@ -198,11 +345,23 @@ namespace Moon.Helpers
 		}
 
 		/// <summary>
+		/// Checks if the arguments are valid email addresses.
+		/// </summary>
+		/// <param name="arguments"></param>
+		public static void ValidEmail(params string[] arguments)
+		{
+			if (arguments == null || arguments.Any(x => !ValidEmailRegex.IsMatch(x)))
+			{
+				throw GuardException(Settings.Moon.Language.InvalidEmail, arguments);
+			}
+		}
+
+		/// <summary>
 		/// Checks if all types are serializable.
 		/// </summary>
 		/// <param name="arguments">A list of types.</param>
 		///<exception cref="MoonGuardException">Some of the types aren't serializable.</exception>
-		public static void IsSerializable(params Type[] arguments)
+		public static void Serializable(params Type[] arguments)
 		{
 			if (arguments == null || arguments.Any(x => !x.IsSerializable))
 			{

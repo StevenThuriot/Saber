@@ -56,6 +56,11 @@
 		string GuidParseError { get; }
 		
 		/// <summary>
+		///   Looks up a localized string similar to An invalid email has been passed..
+		/// </summary>
+		string InvalidEmail { get; }
+
+		/// <summary>
 		///   Looks up a string similar to "Not all booleans are false".
 		/// </summary>
 		string IsFalse { get; }
@@ -64,6 +69,16 @@
 		///   Looks up a string similar to "Not all booleans are true".
 		/// </summary>
 		string IsTrue { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to "Negative numbers have been passed.".
+		/// </summary>
+		string NegativeNumbers { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to "Negative numbers or zero have been passed.".
+		/// </summary>
+		string NegativeNumbersOrZero { get; }
 
 		/// <summary>
 		///   Looks up a localized string similar to "A type was passed that wasn't serializable".
@@ -104,6 +119,16 @@
 		///   Looks up a string similar to "NULL".
 		/// </summary>
 		string NullValue { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to "Positive numbers have been passed.".
+		/// </summary>
+		string PositiveNumbers { get; }
+
+		/// <summary>
+		///   Looks up a localized string similar to Positive numbers or zero have been passed..
+		/// </summary>
+		string PostiveNumbersOrZero { get; }
 
 		/// <summary>
 		///   Looks up a string similar to ": ".

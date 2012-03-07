@@ -147,6 +147,9 @@
   <data name="GuidParseError" xml:space="preserve">
     <value>Not all arguments can not be converted to Guids</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>An invalid email has been passed.</value>
+  </data>
   <data name="IsFalse" xml:space="preserve">
     <value>Not all booleans are false</value>
   </data>
@@ -155,6 +158,12 @@
   </data>
   <data name="IsTrue" xml:space="preserve">
     <value>Not all booleans are true</value>
+  </data>
+  <data name="NegativeNumbers" xml:space="preserve">
+    <value>Negative numbers have been passed.</value>
+  </data>
+  <data name="NegativeNumbersOrZero" xml:space="preserve">
+    <value>Negative numbers or zero have been passed.</value>
   </data>
   <data name="NoArguments" xml:space="preserve">
     <value>No arguments</value>
@@ -176,6 +185,12 @@
   </data>
   <data name="NullValue" xml:space="preserve">
     <value>NULL</value>
+  </data>
+  <data name="PositiveNumbers" xml:space="preserve">
+    <value>Positive numbers have been passed.</value>
+  </data>
+  <data name="PostiveNumbersOrZero" xml:space="preserve">
+    <value>Positive numbers or zero have been passed.</value>
   </data>
   <data name="SentenceSeparator" xml:space="preserve">
     <value>: </value>

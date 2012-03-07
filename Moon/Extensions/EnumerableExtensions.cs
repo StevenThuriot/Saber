@@ -6,10 +6,10 @@ using System.Linq;
 
 namespace Moon.Extensions
 {
-    /// <summary>
-    /// Extension methods on lists
-    /// </summary>
-    public static class EnumerableExtensions
+	/// <summary>
+	/// Extension methods on lists
+	/// </summary>
+	public static class EnumerableExtensions
 	{
 		///<summary>
 		/// Returns the passed enumerable as a ReadOnlyCollection.
@@ -59,24 +59,24 @@ namespace Moon.Extensions
 			if (values == null)
 				return;
 
-			foreach (var item in values)
+			foreach (T item in values)
 			{
 				enumerable.AddUnique(item);
 			}
 		}
 
-    	/// <summary>
+		/// <summary>
 		/// Transforms array of structs into an array of objects.
 		/// </summary>
 		/// <typeparam name="T">The type of struct.</typeparam>
 		/// <param name="enumerable">The arguments.</param>
 		/// <returns>An array of objects.</returns>
 		public static object[] BoxToArray<T>(this IEnumerable<T> enumerable)
-				where T : struct
+			where T : struct
 		{
 			return enumerable == null
-				? null
-				: enumerable.Cast<object>().ToArray();
+			       	? null
+			       	: enumerable.Cast<object>().ToArray();
 		}
 
 		///<summary>
@@ -102,14 +102,14 @@ namespace Moon.Extensions
 		/// </summary>
 		/// <typeparam name="T">Element type of the sequence</typeparam>
 		/// <param name="source">Source to consume</param>
-		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "element", 
+		[SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "element",
 			Justification = "The point is to just iterate the list. We don't want to do anything with it.")]
 		public static void Consume<T>(this IEnumerable<T> source)
 		{
 			if (source == null)
 				return;
 
-			foreach (var element in source)
+			foreach (T element in source)
 			{
 			}
 		}
@@ -128,7 +128,7 @@ namespace Moon.Extensions
 
 			if (enumerable != null)
 			{
-				foreach (var value in enumerable)
+				foreach (TItem value in enumerable)
 				{
 					list.Add(value);
 				}
@@ -148,7 +148,8 @@ namespace Moon.Extensions
 		///<typeparam name="T">The type of item getting counted. This is of no relevance, just to keep the method generic.</typeparam>
 		///<exception cref="OverflowException">An overflow exception will be thrown when 'numberOfItems' equals int.MaxValue</exception>
 		///<returns>The result of the passed predicate.</returns>
-		private static bool OptimizedCount<T>(IEnumerable<T> enumerable, int numberOfItems, Func<T, bool> wherePredicate, Func<int, bool> comparePredicate)
+		private static bool OptimizedCount<T>(IEnumerable<T> enumerable, int numberOfItems, Func<T, bool> wherePredicate,
+		                                      Func<int, bool> comparePredicate)
 		{
 			if (enumerable == null || numberOfItems < 0) return false;
 
@@ -157,10 +158,10 @@ namespace Moon.Extensions
 				enumerable = enumerable.Where(wherePredicate);
 			}
 
-			var numberOfItemsToCount = checked(numberOfItems + 1);
-			var countedItems = 0;
+			int numberOfItemsToCount = checked(numberOfItems + 1);
+			int countedItems = 0;
 
-			var enumerator = enumerable.GetEnumerator();
+			IEnumerator<T> enumerator = enumerable.GetEnumerator();
 			while (enumerator.MoveNext() && countedItems < numberOfItemsToCount)
 			{
 				countedItems++;
@@ -286,7 +287,8 @@ namespace Moon.Extensions
 		///<exception cref="OverflowException">An overflow exception will be thrown when 'numberOfItems' equals int.MaxValue</exception>
 		///<returns>True if the list contains less or the same amount of items as defined in 'numberOfItems'.</returns>
 		[SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "CountLess")]
-		public static bool CountLessOrEqualTo<T>(this IEnumerable<T> enumerable, int numberOfItems, Func<T, bool> wherePredicate)
+		public static bool CountLessOrEqualTo<T>(this IEnumerable<T> enumerable, int numberOfItems,
+		                                         Func<T, bool> wherePredicate)
 		{
 			return OptimizedCount(enumerable, numberOfItems, wherePredicate, x => x <= numberOfItems);
 		}
@@ -315,63 +317,64 @@ namespace Moon.Extensions
 		///<typeparam name="T">The type of item getting counted. This is of no relevance, just to keep the method generic.</typeparam>
 		///<exception cref="OverflowException">An overflow exception will be thrown when 'numberOfItems' equals int.MaxValue</exception>
 		///<returns>True if the list contains more or the same amount of items as defined in 'numberOfItems'.</returns>
-		public static bool CountGreaterOrEqualTo<T>(this IEnumerable<T> enumerable, int numberOfItems, Func<T, bool> wherePredicate)
+		public static bool CountGreaterOrEqualTo<T>(this IEnumerable<T> enumerable, int numberOfItems,
+		                                            Func<T, bool> wherePredicate)
 		{
 			return OptimizedCount(enumerable, numberOfItems, wherePredicate, x => x >= numberOfItems);
 		}
 
-        ///<summary>
-        /// Uses the most optimized way of checking if a list of items is empty or not.
-        ///</summary>
-        ///<param name="collection">The collection to check</param>
-        ///<typeparam name="T">The type of items in the collection</typeparam>
-        ///<returns>True if not empty</returns>
-        public static bool IsNullOrEmpty<T>(this ICollection<T> collection)
-        {
+		///<summary>
+		/// Uses the most optimized way of checking if a list of items is empty or not.
+		///</summary>
+		///<param name="collection">The collection to check</param>
+		///<typeparam name="T">The type of items in the collection</typeparam>
+		///<returns>True if not empty</returns>
+		public static bool IsNullOrEmpty<T>(this ICollection<T> collection)
+		{
 			return collection == null || collection.Count == 0;
-        }
-		
-        /// <summary>
-        /// Uses the most optimized way of checking if a list of items is empty or not.
-        /// </summary>
-        ///<param name="array">The array to check</param>
-        ///<typeparam name="T">The type of items in the array</typeparam>
-        ///<returns>True if not empty</returns>
-        public static bool IsNullOrEmpty<T>(this T[] array)
-        {
-        	return array == null || array.Length == 0;
-        }
+		}
 
-        /// <summary>
-        /// Uses the most optimized way of checking if a list of items is empty or not.
-        /// </summary>
-        ///<param name="enumerable">The enumeration to check</param>
-        ///<typeparam name="T">The type of items in the enumeration</typeparam>
-        ///<returns>True if not empty</returns>
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
-        {
-            return enumerable == null || !enumerable.Any();
-        }
+		/// <summary>
+		/// Uses the most optimized way of checking if a list of items is empty or not.
+		/// </summary>
+		///<param name="array">The array to check</param>
+		///<typeparam name="T">The type of items in the array</typeparam>
+		///<returns>True if not empty</returns>
+		public static bool IsNullOrEmpty<T>(this T[] array)
+		{
+			return array == null || array.Length == 0;
+		}
 
-        /// <summary>
-        /// Performs the passed action on each item in the enumeration.
-        /// </summary>
-        /// <typeparam name="T">The type of items the enumeration contains.</typeparam>
-        /// <param name="enumerable">The enumeration.</param>
-        /// <param name="action">The action.</param>
-        /// <returns>The enumeration.</returns>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
-        {
-        	if (enumerable != null)
-        	{
-        		foreach (var item in enumerable)
-        		{
-        			action(item);
-        		}
-        	}
-			
+		/// <summary>
+		/// Uses the most optimized way of checking if a list of items is empty or not.
+		/// </summary>
+		///<param name="enumerable">The enumeration to check</param>
+		///<typeparam name="T">The type of items in the enumeration</typeparam>
+		///<returns>True if not empty</returns>
+		public static bool IsNullOrEmpty<T>(this IEnumerable<T> enumerable)
+		{
+			return enumerable == null || !enumerable.Any();
+		}
+
+		/// <summary>
+		/// Performs the passed action on each item in the enumeration.
+		/// </summary>
+		/// <typeparam name="T">The type of items the enumeration contains.</typeparam>
+		/// <param name="enumerable">The enumeration.</param>
+		/// <param name="action">The action.</param>
+		/// <returns>The enumeration.</returns>
+		public static IEnumerable<T> ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+		{
+			if (enumerable != null)
+			{
+				foreach (T item in enumerable)
+				{
+					action(item);
+				}
+			}
+
 			return enumerable;
-        }
+		}
 
 		/// <summary>
 		/// Skips items from the input sequence until the given predicate returns true
@@ -384,7 +387,7 @@ namespace Moon.Extensions
 		/// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null</exception>
 		public static IEnumerable<TSource> SkipUntil<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
 		{
-			using (var iterator = source.GetEnumerator())
+			using (IEnumerator<TSource> iterator = source.GetEnumerator())
 			{
 				while (iterator.MoveNext())
 				{
@@ -399,7 +402,7 @@ namespace Moon.Extensions
 				}
 			}
 		}
-		
+
 		///<summary>
 		/// Strips null values from the enumerable.
 		///</summary>
@@ -447,7 +450,7 @@ namespace Moon.Extensions
 
 			var queue = new Queue<T>(count);
 
-			foreach (var item in source)
+			foreach (T item in source)
 			{
 				if (queue.Count == count)
 					queue.Dequeue();
@@ -455,7 +458,7 @@ namespace Moon.Extensions
 				queue.Enqueue(item);
 			}
 
-			foreach (var item in queue)
+			foreach (T item in queue)
 				yield return item;
 		}
 
@@ -473,7 +476,7 @@ namespace Moon.Extensions
 			if (source == null || predicate == null)
 				yield break;
 
-			foreach (var item in source)
+			foreach (T item in source)
 			{
 				yield return item;
 
@@ -485,19 +488,19 @@ namespace Moon.Extensions
 		}
 
 
-    	/// <summary>
-        /// Turns an IEnumerable into a string using a certain delimiter.
-        /// Returns an empty string incase the enumeration is null or empty.
-        /// </summary>
-        /// <typeparam name="T">The type of items the enumeration contains.</typeparam>
-        /// <param name="enumerable">The enumeration.</param>
-        /// <param name="delimiter">The delimiter.</param>
-        /// <returns>A string representation of the list.</returns>
-        public static string ToString<T>(this IEnumerable<T> enumerable, string delimiter)
-        {
-            return enumerable == null
-                           ? null
-                           : string.Join(delimiter, enumerable.Select(data => data.ToString()).ToArray());
-        }
+		/// <summary>
+		/// Turns an IEnumerable into a string using a certain delimiter.
+		/// Returns an empty string incase the enumeration is null or empty.
+		/// </summary>
+		/// <typeparam name="T">The type of items the enumeration contains.</typeparam>
+		/// <param name="enumerable">The enumeration.</param>
+		/// <param name="delimiter">The delimiter.</param>
+		/// <returns>A string representation of the list.</returns>
+		public static string ToString<T>(this IEnumerable<T> enumerable, string delimiter)
+		{
+			return enumerable == null
+			       	? null
+			       	: string.Join(delimiter, enumerable.Select(data => data.ToString()).ToArray());
+		}
 	}
 }

@@ -11,38 +11,39 @@ using Moon.Extensions;
 
 namespace Moon.Helpers
 {
-    /// <summary>
-    /// Helper to make sure the passed parameters are correct.
-    /// The extra information this class returns is built using the ToString method. Make sure you've implemented it in your classes if necessary.
-    /// </summary>
+	/// <summary>
+	/// Helper to make sure the passed parameters are correct.
+	/// The extra information this class returns is built using the ToString method. Make sure you've implemented it in your classes if necessary.
+	/// </summary>
 	[DebuggerDisplay("Moon's Guard. Usage of reflection is set currently to {UseReflection}")]
-    public static class Guard
-    {
-    	internal static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
+	public static class Guard
+	{
+		internal static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
 
-    	private static bool _UseReflection = true;
-    	///<summary>
+		private static bool _UseReflection = true;
+
+		///<summary>
 		/// When set to false, the extra information gathering about the calling method (using reflection) will be turned off.
 		/// Default value is true
 		///</summary>
 		public static bool UseReflection
-    	{
-    		get { return _UseReflection; }
-    		set { _UseReflection = value; }
-    	}
+		{
+			get { return _UseReflection; }
+			set { _UseReflection = value; }
+		}
 
-    	///<summary>
+		///<summary>
 		/// Determines whether the passed arguments are compliant with the given expression.
 		///</summary>
 		///<param name="func">The expression to check.</param>
 		///<param name="arguments">The arguments.</param>
 		///<typeparam name="T">The specific type to check.</typeparam>
 		///<exception cref="MoonGuardException">The expression is false.</exception>
-		public static void Check<T>(Func<T , bool> func, params T[] arguments)
+		public static void Check<T>(Func<T, bool> func, params T[] arguments)
 		{
 			if (func == null) return;
 
-			var throwException = false;
+			bool throwException = false;
 
 			if (arguments == null)
 			{
@@ -58,42 +59,42 @@ namespace Moon.Helpers
 
 			if (throwException)
 			{
-				var objectArray = arguments == null ? new object[] {null} : arguments.Cast<object>().ToArray();
+				object[] objectArray = arguments == null ? new object[] {null} : arguments.Cast<object>().ToArray();
 				throw GuardException(Settings.Moon.Language.NotCompliant, objectArray);
 			}
 		}
 
-    	/// <summary>
-        /// Determines whether the typeToAssign can be assigned to the targetType
-        /// </summary>
-        /// <param name="typeToAssign">The type to assign.</param>
-        /// <param name="targetType">Type of the target.</param>
-        /// <exception cref="MoonGuardException">The types can't be assigned.</exception>
-        public static void CanBeAssigned(Type typeToAssign, Type targetType)
-    	{
+		/// <summary>
+		/// Determines whether the typeToAssign can be assigned to the targetType
+		/// </summary>
+		/// <param name="typeToAssign">The type to assign.</param>
+		/// <param name="targetType">Type of the target.</param>
+		/// <exception cref="MoonGuardException">The types can't be assigned.</exception>
+		public static void CanBeAssigned(Type typeToAssign, Type targetType)
+		{
 			if (typeToAssign == null || targetType == null)
 			{
 				throw GuardException(Settings.Moon.Language.NullHasBeenPassed);
 			}
 
-            if (!typeToAssign.CanBeAssignedTo(targetType))
-            {
+			if (!typeToAssign.CanBeAssignedTo(targetType))
+			{
 				string message = string.Format(CultureInfo.CurrentCulture,
-                                               targetType.IsInterface
-                                                       ? Settings.Moon.Language.TypeCannotBeAssignedInterface
-                                                       : Settings.Moon.Language.TypeCannotBeAssigned,
-                                               typeToAssign.Name, targetType.Name);
+				                               targetType.IsInterface
+				                               	? Settings.Moon.Language.TypeCannotBeAssignedInterface
+				                               	: Settings.Moon.Language.TypeCannotBeAssigned,
+				                               typeToAssign.Name, targetType.Name);
 
 				throw GuardException(message);
-            }
-        }
+			}
+		}
 
-        /// <summary>
-        /// Checks the arguments to ensure they are parsable to guid
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the strings can't be parsed to Guids, null, empty or whitespace.</exception>
-        public static IEnumerable<Guid> CanParseToGuid(params string[] arguments)
+		/// <summary>
+		/// Checks the arguments to ensure they are parsable to guid
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the strings can't be parsed to Guids, null, empty or whitespace.</exception>
+		public static IEnumerable<Guid> CanParseToGuid(params string[] arguments)
 		{
 			if (arguments == null)
 			{
@@ -105,44 +106,44 @@ namespace Moon.Helpers
 				return new List<Guid>();
 			}
 
-        	IEnumerable<Guid> list;
+			IEnumerable<Guid> list;
 
 			if (!arguments.Any(x => x.IsNullOrWhiteSpace()))
-        	{
-        		try
-        		{
-        			list = arguments.Select(x => new Guid(x)).ToList();
-        		}
-        		catch
+			{
+				try
+				{
+					list = arguments.Select(x => new Guid(x)).ToList();
+				}
+				catch
 				{
 					throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
-        		}
+				}
 
-        		if (list.Any(x => x == Guid.Empty))
-        		{
-        			throw GuardException(Settings.Moon.Language.GuidParseError, arguments); 
-        		}
-        	}
+				if (list.Any(x => x == Guid.Empty))
+				{
+					throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
+				}
+			}
 			else
 			{
-				throw GuardException(Settings.Moon.Language.GuidParseError, arguments); 
+				throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
 			}
 
-        	return list;
-        }
+			return list;
+		}
 
-        /// <summary>
-        /// Checks the guids to ensure they are not empty.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the guids are empty.</exception>
-        public static void GuidNotEmpty(params Guid[] arguments)
-        {
+		/// <summary>
+		/// Checks the guids to ensure they are not empty.
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the guids are empty.</exception>
+		public static void GuidNotEmpty(params Guid[] arguments)
+		{
 			if (arguments == null || arguments.Any(x => x == Guid.Empty))
-        	{
-        		throw GuardException(Settings.Moon.Language.EmptyGuids, arguments.BoxToArray());
-        	}
-        }
+			{
+				throw GuardException(Settings.Moon.Language.EmptyGuids, arguments.BoxToArray());
+			}
+		}
 
 		/// <summary>
 		/// Checks if all passed arguments are positive.
@@ -288,35 +289,35 @@ namespace Moon.Helpers
 			}
 		}
 
-    	/// <summary>
-        /// Checks the dates to ensure they are in the future.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the dates are in the past.</exception>
-        public static void InTheFuture(params DateTime[] arguments)
-        {
-        	var now = DateTime.Now;
+		/// <summary>
+		/// Checks the dates to ensure they are in the future.
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the dates are in the past.</exception>
+		public static void InTheFuture(params DateTime[] arguments)
+		{
+			DateTime now = DateTime.Now;
 
 			if (arguments == null || arguments.Any(x => x.CompareTo(now) <= 0))
-            {
+			{
 				throw GuardException(Settings.Moon.Language.NotAllDatesAreInTheFuture, arguments.BoxToArray());
-            }
-        }
+			}
+		}
 
-        /// <summary>
-        /// Checks the dates to ensure they are in the past.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the dates are in the future.</exception>
-        public static void InThePast(params DateTime[] arguments)
+		/// <summary>
+		/// Checks the dates to ensure they are in the past.
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the dates are in the future.</exception>
+		public static void InThePast(params DateTime[] arguments)
 		{
-			var now = DateTime.Now;
+			DateTime now = DateTime.Now;
 
 			if (arguments == null || arguments.Any(x => x.CompareTo(now) >= 0))
-            {
+			{
 				throw GuardException(Settings.Moon.Language.NotAllDatesAreInThePast, arguments.BoxToArray());
-            }
-        }
+			}
+		}
 
 		///<summary>
 		/// Checks if all arguments are true.
@@ -369,45 +370,45 @@ namespace Moon.Helpers
 			}
 		}
 
-        /// <summary>
-        /// Checks the arguments to ensure they aren't null.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the arguments are null.</exception>
-        public static void NotNull(params object[] arguments)
-        {
+		/// <summary>
+		/// Checks the arguments to ensure they aren't null.
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the arguments are null.</exception>
+		public static void NotNull(params object[] arguments)
+		{
 			if (arguments == null || arguments.Any(x => x == null))
 			{
 				throw GuardException(Settings.Moon.Language.NullHasBeenPassed, arguments);
 			}
-        }
+		}
 
-        /// <summary>
-        /// Checks the arguments to ensure they aren't null, empty or whitespace.
-        /// </summary>
-        /// <param name="arguments">The arguments.</param>
-        /// <exception cref="MoonGuardException">Some of the arguments are null, empty or whitespace.</exception>
-        public static void NotNullOrWhiteSpace(params string[] arguments)
-        {
+		/// <summary>
+		/// Checks the arguments to ensure they aren't null, empty or whitespace.
+		/// </summary>
+		/// <param name="arguments">The arguments.</param>
+		/// <exception cref="MoonGuardException">Some of the arguments are null, empty or whitespace.</exception>
+		public static void NotNullOrWhiteSpace(params string[] arguments)
+		{
 			if (arguments == null || arguments.Any(x => x.IsNullOrWhiteSpace()))
-            {
+			{
 				throw GuardException(Settings.Moon.Language.NullEmptyOrWhiteSpaceHasBeenPassed, arguments);
-            }
-        }
+			}
+		}
 
-    	/// <summary>
-        /// Checks if the start datetime is before the end datetime.
-        /// </summary>
+		/// <summary>
+		/// Checks if the start datetime is before the end datetime.
+		/// </summary>
 		/// <param name="startDate">The start datetime.</param>
 		/// <param name="endDate">The end datetime.</param>
-        /// <exception cref="MoonGuardException">The start datetime is after or equal to end datetime.</exception>
-        public static void StartBeforeEnd(DateTime startDate, DateTime endDate)
-        {
-            if (!startDate.IsBefore(endDate))
-            {
-				throw GuardException(Settings.Moon.Language.StartBeforeEndDate, new object[] { startDate, endDate });
-            }
-        }
+		/// <exception cref="MoonGuardException">The start datetime is after or equal to end datetime.</exception>
+		public static void StartBeforeEnd(DateTime startDate, DateTime endDate)
+		{
+			if (!startDate.IsBefore(endDate))
+			{
+				throw GuardException(Settings.Moon.Language.StartBeforeEndDate, new object[] {startDate, endDate});
+			}
+		}
 
 		/// <summary>
 		/// An error has been found -> Throw an exception.
@@ -420,42 +421,42 @@ namespace Moon.Helpers
 
 			if (UseReflection)
 			{
-			    var frame = new StackFrame(2, false);
-                MethodBase methodBase = frame.GetMethod();
+				var frame = new StackFrame(2, false);
+				MethodBase methodBase = frame.GetMethod();
 
 				builder.Append(message);
 
 				builder.Append(Settings.Moon.Language.SentenceSeparator);
-				
-                if (methodBase != null)
-                {
-					builder.Append(Settings.Moon.Language.GuardErrorMessageBase
-                                    .FormatWith(methodBase.DeclaringType.FullName,
-                                                methodBase.Name));
-                }
 
-                if (arguments != null)
-                {
+				if (methodBase != null)
+				{
+					builder.Append(Settings.Moon.Language.GuardErrorMessageBase
+					               	.FormatWith(methodBase.DeclaringType.FullName,
+					               	            methodBase.Name));
+				}
+
+				if (arguments != null)
+				{
 					builder.Append(Settings.Moon.Language.GuardErrorMessage);
 
-                    for (int i = 0; i < arguments.Length; i++)
-                    {
+					for (int i = 0; i < arguments.Length; i++)
+					{
 						builder.Append(Settings.Moon.Language.DatamemberBracketOpen);
 
 						builder.Append(arguments[i] != null ? arguments[i].ToString() : Settings.Moon.Language.NullValue);
 
 						builder.Append(Settings.Moon.Language.DatamemberBracketClose);
 
-                        if (i != arguments.Length - 1)
-                        {
+						if (i != arguments.Length - 1)
+						{
 							builder.Append(Settings.Moon.Language.ErrorSeparator);
-                        }
-                    }
-                }
-                else
-                {
+						}
+					}
+				}
+				else
+				{
 					builder.Append(Settings.Moon.Language.NoArguments);
-                }
+				}
 			}
 			else
 			{
@@ -473,5 +474,5 @@ namespace Moon.Helpers
 		{
 			return new MoonGuardException(message + Settings.Moon.Language.EndOfSentence);
 		}
-    }
+	}
 }

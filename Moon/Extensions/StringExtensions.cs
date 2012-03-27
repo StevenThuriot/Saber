@@ -65,7 +65,7 @@ namespace Moon.Extensions
 		///<returns>True if valid</returns>
 		public static bool IsValidEmailAddress(this string value)
 		{
-			return Ensure.ValidEmailRegex.IsMatch(value);
+			return Ensure.ValidEmail(value);
 		}
 
 		/// <summary>

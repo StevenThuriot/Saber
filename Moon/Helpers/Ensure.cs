@@ -11,7 +11,7 @@ namespace Moon.Helpers
 	/// </summary>
 	public static class Ensure
 	{
-		internal static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
+		private static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
 
 		/// <summary>
 		/// Determines whether the passed arguments are compliant with the given expression.

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using Moon.Exceptions;
 using Moon.Extensions;
 
@@ -18,8 +17,6 @@ namespace Moon.Helpers
 	[DebuggerDisplay("Moon's Guard. Usage of reflection is set currently to {UseReflection}")]
 	public static class Guard
 	{
-		internal static readonly Regex ValidEmailRegex = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$");
-
 		private static bool _UseReflection = true;
 
 		///<summary>
@@ -41,25 +38,9 @@ namespace Moon.Helpers
 		///<exception cref="MoonGuardException">The expression is false.</exception>
 		public static void Check<T>(Func<T, bool> func, params T[] arguments)
 		{
-			if (func == null) return;
-
-			bool throwException = false;
-
-			if (arguments == null)
+			if (!Ensure.Check(func, arguments))
 			{
-				if (typeof (T).IsClass && !func(default (T)))
-				{
-					throwException = true;
-				}
-			}
-			else if (arguments.Any(x => !func(x)))
-			{
-				throwException = true;
-			}
-
-			if (throwException)
-			{
-				object[] objectArray = arguments == null ? new object[] {null} : arguments.Cast<object>().ToArray();
+				var objectArray = arguments == null ? new object[] {null} : arguments.Cast<object>().ToArray();
 				throw GuardException(Settings.Moon.Language.NotCompliant, objectArray);
 			}
 		}
@@ -96,40 +77,13 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the strings can't be parsed to Guids, null, empty or whitespace.</exception>
 		public static IEnumerable<Guid> CanParseToGuid(params string[] arguments)
 		{
-			if (arguments == null)
+			IEnumerable<Guid> guidList;
+			if (Ensure.CanParseToGuid(arguments, out guidList))
 			{
-				throw GuardException(Settings.Moon.Language.GuidParseError);
+				return guidList;
 			}
 
-			if (arguments.Length == 0)
-			{
-				return new List<Guid>();
-			}
-
-			IEnumerable<Guid> list;
-
-			if (!arguments.Any(x => x.IsNullOrWhiteSpace()))
-			{
-				try
-				{
-					list = arguments.Select(x => new Guid(x)).ToList();
-				}
-				catch
-				{
-					throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
-				}
-
-				if (list.Any(x => x == Guid.Empty))
-				{
-					throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
-				}
-			}
-			else
-			{
-				throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
-			}
-
-			return list;
+			throw GuardException(Settings.Moon.Language.GuidParseError, arguments);
 		}
 
 		/// <summary>
@@ -139,7 +93,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the guids are empty.</exception>
 		public static void GuidNotEmpty(params Guid[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x == Guid.Empty))
+			if (!Ensure.GuidNotEmpty(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.EmptyGuids, arguments.BoxToArray());
 			}
@@ -151,7 +105,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Positive(params int[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x < 0))
+			if (!Ensure.Positive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
 			}
@@ -163,7 +117,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictPositive(params int[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x <= 0))
+			if (!Ensure.StrictPositive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
 			}
@@ -175,7 +129,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Negative(params int[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x > 0))
+			if (!Ensure.Negative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
 			}
@@ -187,7 +141,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictNegative(params int[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x >= 0))
+			if (!Ensure.StrictNegative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
 			}
@@ -199,7 +153,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Positive(params decimal[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x < 0))
+			if (!Ensure.Positive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
 			}
@@ -211,7 +165,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictPositive(params decimal[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x <= 0))
+			if (!Ensure.StrictPositive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
 			}
@@ -223,7 +177,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Negative(params decimal[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x > 0))
+			if (!Ensure.Negative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
 			}
@@ -235,7 +189,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictNegative(params decimal[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x >= 0))
+			if (!Ensure.StrictNegative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
 			}
@@ -247,7 +201,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Positive(params double[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x < 0))
+			if (!Ensure.Positive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbers, arguments.BoxToArray());
 			}
@@ -259,7 +213,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictPositive(params double[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x <= 0))
+			if (!Ensure.StrictPositive(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NegativeNumbersOrZero, arguments.BoxToArray());
 			}
@@ -271,7 +225,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void Negative(params double[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x > 0))
+			if (!Ensure.Negative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PositiveNumbers, arguments.BoxToArray());
 			}
@@ -283,7 +237,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void StrictNegative(params double[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x >= 0))
+			if (!Ensure.StrictNegative(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.PostiveNumbersOrZero, arguments.BoxToArray());
 			}
@@ -296,9 +250,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the dates are in the past.</exception>
 		public static void InTheFuture(params DateTime[] arguments)
 		{
-			DateTime now = DateTime.Now;
-
-			if (arguments == null || arguments.Any(x => x.CompareTo(now) <= 0))
+			if (!Ensure.InTheFuture(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NotAllDatesAreInTheFuture, arguments.BoxToArray());
 			}
@@ -311,9 +263,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the dates are in the future.</exception>
 		public static void InThePast(params DateTime[] arguments)
 		{
-			DateTime now = DateTime.Now;
-
-			if (arguments == null || arguments.Any(x => x.CompareTo(now) >= 0))
+			if (!Ensure.InThePast(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NotAllDatesAreInThePast, arguments.BoxToArray());
 			}
@@ -326,7 +276,7 @@ namespace Moon.Helpers
 		///<exception cref="MoonGuardException">Some of the booleans are false.</exception>
 		public static void True(params bool[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => !x))
+			if (!Ensure.True(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.IsTrue, arguments.BoxToArray());
 			}
@@ -339,7 +289,7 @@ namespace Moon.Helpers
 		///<exception cref="MoonGuardException">Some of the booleans are true.</exception>
 		public static void False(params bool[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x))
+			if (!Ensure.False(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.IsFalse, arguments.BoxToArray());
 			}
@@ -351,7 +301,7 @@ namespace Moon.Helpers
 		/// <param name="arguments"></param>
 		public static void ValidEmail(params string[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => !ValidEmailRegex.IsMatch(x)))
+			if (!Ensure.ValidEmail(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.InvalidEmail, arguments);
 			}
@@ -364,7 +314,7 @@ namespace Moon.Helpers
 		///<exception cref="MoonGuardException">Some of the types aren't serializable.</exception>
 		public static void Serializable(params Type[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => !x.IsSerializable))
+			if (!Ensure.Serializable(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.IsSerializable, arguments);
 			}
@@ -377,7 +327,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the arguments are null.</exception>
 		public static void NotNull(params object[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x == null))
+			if (!Ensure.NotNull(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NullHasBeenPassed, arguments);
 			}
@@ -390,7 +340,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">Some of the arguments are null, empty or whitespace.</exception>
 		public static void NotNullOrWhiteSpace(params string[] arguments)
 		{
-			if (arguments == null || arguments.Any(x => x.IsNullOrWhiteSpace()))
+			if (!Ensure.NotNullOrWhiteSpace(arguments))
 			{
 				throw GuardException(Settings.Moon.Language.NullEmptyOrWhiteSpaceHasBeenPassed, arguments);
 			}
@@ -404,7 +354,7 @@ namespace Moon.Helpers
 		/// <exception cref="MoonGuardException">The start datetime is after or equal to end datetime.</exception>
 		public static void StartBeforeEnd(DateTime startDate, DateTime endDate)
 		{
-			if (!startDate.IsBefore(endDate))
+			if (!Ensure.StartBeforeEnd(startDate,endDate))
 			{
 				throw GuardException(Settings.Moon.Language.StartBeforeEndDate, new object[] {startDate, endDate});
 			}

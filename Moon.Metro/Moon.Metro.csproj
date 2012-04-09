@@ -110,6 +110,11 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Extensions\NotificationExtensions.cs" />
+    <Compile Include="Helpers\Builders\INotificationBuilder.cs" />
+    <Compile Include="Helpers\Builders\NotificationBuilder.cs" />
+    <Compile Include="Helpers\Builders\NotificationBuilder.Explicit.cs">
+      <DependentUpon>NotificationBuilder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

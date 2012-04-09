@@ -13,12 +13,21 @@ namespace Moon.Metro.Extensions
 {
     public static class NotificationExtensions
     {
-		public static void Update(this TileNotification tileNotification)
+        /// <summary>
+        /// Sends the tile notification.
+        /// </summary>
+        /// <param name="tileNotification">The tile notification to send.</param>
+		public static void Send(this TileNotification tileNotification)
 		{
 			NotificationHelper.TileUpdater.Update(tileNotification);
 		}
 		
-		public static void ExpireIn(this TileNotification tileNotification, int seconds)
+        /// <summary>
+        /// Sets the expiration time for a tilenotification in seconds.
+        /// </summary>
+        /// <param name="tileNotification">The tile notification.</param>
+        /// <param name="seconds">The expiration time in seconds.</param>
+		public static void ExpireIn(this TileNotification tileNotification, uint seconds)
 		{
             var expirationTime = DateTimeOffset.Now.AddSeconds(seconds);
             tileNotification.ExpirationTime = expirationTime;

@@ -90,6 +90,7 @@
     <Compile Include="DirtyBaseEntity.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\WidthExtensions.cs" />
     <Compile Include="Properties\NamespaceDefinitions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

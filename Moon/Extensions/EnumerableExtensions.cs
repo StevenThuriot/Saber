@@ -109,9 +109,7 @@ namespace Moon.Extensions
 			if (source == null)
 				return;
 
-			foreach (T element in source)
-			{
-			}
+			foreach (var element in source) { }
 		}
 
 		/// <summary>
@@ -357,6 +355,19 @@ namespace Moon.Extensions
 		}
 
 		/// <summary>
+		/// Selects the maximum from a list after applying a selector.
+		/// </summary>
+		/// <typeparam name="TSource">The source type.</typeparam>
+		/// <typeparam name="TResult">The result type.</typeparam>
+		/// <param name="enumerable">The original list.</param>
+		/// <param name="selector">The selector used to select items from the list.</param>
+		/// <returns>The maximum from the selected items.</returns>
+		public static TResult Max<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, TResult> selector)
+		{
+			return enumerable.Select(selector).Max();
+		}
+
+		/// <summary>
 		/// Performs the passed action on each item in the enumeration.
 		/// </summary>
 		/// <typeparam name="T">The type of items the enumeration contains.</typeparam>
@@ -367,7 +378,7 @@ namespace Moon.Extensions
 		{
 			if (enumerable != null)
 			{
-				foreach (T item in enumerable)
+				foreach (var item in enumerable)
 				{
 					action(item);
 				}
@@ -387,7 +398,7 @@ namespace Moon.Extensions
 		/// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="predicate"/> is null</exception>
 		public static IEnumerable<TSource> SkipUntil<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
 		{
-			using (IEnumerator<TSource> iterator = source.GetEnumerator())
+			using (var iterator = source.GetEnumerator())
 			{
 				while (iterator.MoveNext())
 				{

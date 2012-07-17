@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-16"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Saber.WPF</id>
+        <version>0.5.1.0-beta</version>
+        <title>Saber.WPF</title>
+        <authors>Steven Thuriot</authors>
+        <owners>Steven Thuriot</owners>
+        <projectUrl>https://github.com/StevenThuriot/Saber</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Small helper framework so you don't have to worry about the little things and focus on the main logic behind your code, without having to reinvent the wheel over and over again.
+
+This is a Saber extension specifically for working with WPF applications.</description>
+        <summary>Small helper framework that takes care of a lot of sidetrack logic. (e.g. the typical converters), specifically for WPF projects.</summary>
+        <language>en-US</language>
+        <dependencies>
+            <dependency id="Saber" version="[0.5.1.0-beta]" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="R:\Saber\Main\Saber.WPF.*" target="lib" />
+    </files>
+</package>

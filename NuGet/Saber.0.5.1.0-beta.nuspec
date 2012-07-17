@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-16"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Saber</id>
+        <version>0.5.1.0-beta</version>
+        <title>Saber</title>
+        <authors>Steven Thuriot</authors>
+        <owners>Steven Thuriot</owners>
+        <projectUrl>https://github.com/StevenThuriot/Saber</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Small helper framework so you don't have to worry about the little things and focus on the main logic behind your code, without having to reinvent the wheel over and over again.</description>
+        <summary>Small helper framework that takes care of a lot of sidetrack logic. (e.g. the typical Guard class).</summary>
+        <language>en-US</language>
+    </metadata>
+    <files>
+        <file src="R:\Saber\Main\Saber.dll" target="lib" />
+        <file src="R:\Saber\Main\Saber.pdb" target="lib" />
+        <file src="R:\Saber\Main\Saber.XML" target="lib" />
+    </files>
+</package>

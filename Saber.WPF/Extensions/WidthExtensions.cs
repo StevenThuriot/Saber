@@ -1,5 +1,5 @@
 using System;
-using System.Threading;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -39,7 +39,7 @@ namespace Saber.WPF.Extensions
 		/// <returns>A double representing the desired width for the given text.</returns>
 		public static double CalculateWidth(this Selector selector)
 		{
-			var text = Convert.ToString(selector.SelectedValue);
+			var text = Convert.ToString(selector.SelectedValue, CultureInfo.CurrentCulture);
 			return CalculateWidth(text, selector.FontSize, selector.FontFamily, selector.FontWeight, selector.FontStyle, selector.FontStretch, selector.FlowDirection, selector.Foreground);
 		}
 
@@ -63,7 +63,7 @@ namespace Saber.WPF.Extensions
 			var formattedText = new FormattedText
 									(
 										text,
-										Thread.CurrentThread.CurrentUICulture,
+										CultureInfo.CurrentCulture,
 										flowDirection,
 										typeface,
 										fontSize,

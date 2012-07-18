@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -81,9 +81,11 @@
     </Compile>
     <Compile Include="Domain\IPeriod.cs" />
     <Compile Include="Domain\Period.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CloneableExtensions.cs" />
     <Compile Include="Extensions\SerializableExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Factories\BaseFactory.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="Helpers\ArgumentParser.cs" />

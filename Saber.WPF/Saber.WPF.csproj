@@ -81,6 +81,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="BaseWeakEventManager.cs" />
     <Compile Include="Converters\AndConverter.cs" />
     <Compile Include="Converters\AppendConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />

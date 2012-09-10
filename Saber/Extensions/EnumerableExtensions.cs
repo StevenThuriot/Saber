@@ -443,6 +443,19 @@ namespace Saber.Extensions
 			       	? null
 			       	: enumerable.Where(x => x != null);
 		}
+		
+		/// <summary>
+		/// Select all items from several lists.
+		/// </summary>
+		/// <typeparam name="TSource">The source type.</typeparam>
+		/// <typeparam name="TResult">The result type.</typeparam>
+		/// <param name="source">The source list.</param>
+		/// <returns>An enumerable that contains all items from the passed lists.</returns>
+		public static IEnumerable<TResult> SelectMany<TSource, TResult>(this IEnumerable<TSource> source)
+		   where TSource : IEnumerable<TResult>
+		{
+			return source.SelectMany(x => x);
+		}
 
 		/// <summary>
 		/// Returns every N-th element of a source sequence.

@@ -28,6 +28,8 @@ namespace Saber.Logging
     /// <summary>
     /// Threaded Logging Class
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", 
+        Justification = "Disposing CancellationTokenSources don't actually change anything. They still get GC'd if not disposed, so under the moto of keeping it simple, I have decided not to implement IDisposable on this class.")]
     public class ThreadedLogger
     {
         private readonly ActionBlock<string> _ActionBlock;

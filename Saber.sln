@@ -16,9 +16,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saber.Test", "Saber.Test\Sa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{C21BB8B2-767C-448B-92A6-3021DA3CE162}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\Saber.WPF.nuspec = NuGet\Saber.WPF.nuspec
 		NuGet\Saber.nuspec = NuGet\Saber.nuspec
+		NuGet\Saber.WPF.nuspec = NuGet\Saber.WPF.nuspec
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{66D0E263-50C7-464C-95E5-1785B26146BF}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saber.Logging", "Saber.Logging\Saber.Logging.csproj", "{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -30,23 +38,29 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.Build.0 = Publish|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Publish|Any CPU.Build.0 = Publish|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B98ACA31-75C9-4826-8F98-CAC9E463A342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Publish|Any CPU.Build.0 = Publish|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9294E272-D19E-4A18-A44C-7C3BE8061213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Publish|Any CPU.ActiveCfg = Publish|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66BA81BF-22FC-402D-9D7F-0B7AAB1C0F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4DB1FD-A90B-457A-9685-A840C6CBA3FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

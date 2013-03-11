@@ -87,6 +87,7 @@
     <Compile Include="Extensions\CloneableExtensions.cs" />
     <Compile Include="Extensions\SerializableExtensions.cs" />
     <Compile Include="Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Factories\BaseFactory.cs" />
     <Compile Include="Factories\IFactory.cs" />

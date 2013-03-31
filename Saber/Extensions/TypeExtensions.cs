@@ -55,5 +55,24 @@ namespace Saber.Extensions
 		{
 			return type.GetCustomAttributes(typeof(T), inherited).OfType<T>().AsReadOnly();
 		}
+
+        /// <summary>
+        /// Determines whether the passed type of a generic subclass of the generic type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="genericType">Type of the generic.</param>
+        /// <returns>
+        ///   <c>true</c> if the passed type of a generic subclass of the generic type.; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsGenericSubclassOf(this Type type, Type genericType)
+        {
+            if (type == null)
+                return false;
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == genericType)
+                return true;
+
+            return IsGenericSubclassOf(type.BaseType, genericType);
+        }
 	}
 }

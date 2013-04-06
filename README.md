@@ -6,3 +6,9 @@ Saber
 * Dirty tracking for your WPF model.
 * Available as NuGet packages.
 * …
+
+Saber: Origin
+====
+The name “Saber” originates from a fictional character from “Fate/stay night”.
+
+In Fate/stay night, she is Shirō Emiya’s servant. An agile and powerful warrior. Saber is loyal, independent, and reserved; she appears cold, but is actually suppressing her emotions to focus on her goals. Her class is considered the “Most Outstanding”, with excellent ratings in all categories.

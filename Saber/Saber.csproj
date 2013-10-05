@@ -81,6 +81,8 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Domain\GroupedAdjacentEnumerable.cs" />
+    <Compile Include="Domain\GroupOfAdjacent.cs" />
     <Compile Include="Domain\IPeriod.cs" />
     <Compile Include="Domain\Period.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />

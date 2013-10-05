@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Saber.Domain;
 
 namespace Saber.Extensions
 {
@@ -337,6 +338,33 @@ namespace Saber.Extensions
 		{
 			return OptimizedCount(enumerable, numberOfItems, wherePredicate, x => x >= numberOfItems);
 		}
+
+        /// <summary>
+        /// Groups the adjacent elements of a sequence according to a specified key selector function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <returns></returns>
+        public static IEnumerable<IGrouping<TKey, TSource>> GroupAdjacent<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            return GroupAdjacent(source, keySelector, EqualityComparer<TKey>.Default);
+        }
+
+        /// <summary>
+        /// Groups the adjacent elements of a sequence according to a specified key selector function.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <returns></returns>
+        public static IEnumerable<IGrouping<TKey, TSource>> GroupAdjacent<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey> comparer)
+        {
+            return new GroupedAdjacentEnumerable<TSource, TKey>(source, keySelector, comparer);
+        }
 
 		///<summary>
 		/// Uses the most optimized way of checking if a list of items is empty or not.

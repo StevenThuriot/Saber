@@ -16,6 +16,9 @@
 // 
 #endregion
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -28,6 +31,51 @@ namespace Saber.Extensions
 	/// </summary>
 	public static class StringExtensions
 	{
+
+        /// <summary>
+        /// Compute a string to an actual value.
+        /// </summary>
+        /// <remarks>Supported operators are + - / * and %.</remarks>
+        /// <example>"1 + 2".Calculate&lt;int&gt;()</example>
+        /// <param name="value">The mathematical string representation.</param>
+        /// <param name="constants">Constants used in the string will be replaced. (e.g. FIVE + 6).</param>
+        /// <typeparam name="T">The type to convert the result to.</typeparam>
+        /// <returns>The numeral result of the mathematical string.</returns>
+        /// <exception cref="ArithmeticException">When unable to compute the string.</exception>
+        public static T Calculate<T>(this string value, IEnumerable<KeyValuePair<string, string>> constants = null)
+            where T : struct
+        {
+            if (constants != null)
+                value = constants.OrderByDescending(x => x.Key.Length)
+                                 .Aggregate(value, (current, constant) => current.Replace(@constant.Key, @constant.Value));
+
+            var compute = new DataTable().Compute(value, null);
+
+            if (compute is T)
+                return (T)compute;
+
+            if (compute == null)
+                throw new ArithmeticException("Cannot compute {0}.".FormatWith(value));
+
+            var computedType = compute.GetType();
+            var destinationType = typeof(T);
+
+            var descriptor = TypeDescriptor.GetConverter(computedType);
+            if (descriptor.CanConvertTo(destinationType))
+            {
+                return (T)descriptor.ConvertTo(compute, destinationType);
+            }
+
+            descriptor = TypeDescriptor.GetConverter(destinationType);
+            if (descriptor.CanConvertFrom(computedType))
+            {
+                return (T)descriptor.ConvertFrom(compute);
+            }
+
+            throw new ArithmeticException("Can't convert '{0}' to '{1}'.".FormatWith(compute, destinationType));
+        }
+
+
 		/// <summary>
 		/// Replaces the format item in a specified System.String with the text equivalent of the value of a corresponding System.Object instance in a specified array,
 		/// using the Saber Framework Culture Info (Saber.Culture).
@@ -35,7 +83,7 @@ namespace Saber.Extensions
 		/// <param name="value">The string to format.</param>
 		/// <param name="arguments">The arguments to insert into the string.</param>
 		/// <returns>The formatted string.</returns>
-		public static string FormatWith(this string value, params string[] arguments)
+		public static string FormatWith(this string value, params object[] arguments)
 		{
 			return string.Format(CultureInfo.CurrentCulture, value, arguments);
 		}

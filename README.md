@@ -1,4 +1,4 @@
-Saber [![Build status](https://ci.appveyor.com/api/projects/status?id=6dmwb8gut6gk0rm6)](https://ci.appveyor.com/project/Saber)
+Saber [![Build status](https://ci.appveyor.com/api/projects/status/6dmwb8gut6gk0rm6?svg=true)](https://ci.appveyor.com/project/StevenThuriot/Saber)
 ====
 
 * Small helper framework so you don't have to worry about the little things and focus on the main logic behind your code, without having to reinvent the wheel over and over again.

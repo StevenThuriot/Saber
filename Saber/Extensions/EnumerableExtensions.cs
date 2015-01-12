@@ -16,6 +16,7 @@
 // 
 #endregion
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
@@ -83,6 +84,60 @@ namespace Saber.Extensions
 			}
 		}
 
+        /// <summary>
+        /// Appends a list to another one without ordering.
+        /// </summary>
+        /// <remarks>This resembles LINQ's union, except it doesn't distinct.</remarks>
+        /// <param name="source">The first list.</param>
+        /// <param name="additionals">The list to append.</param>
+        /// <returns>An combined version of the two enumerables.</returns>
+        public static IEnumerable Append(this IEnumerable source, IEnumerable additionals)
+        {
+            foreach (var item in source)
+                yield return item;
+
+            foreach (var item in additionals)
+                yield return item;
+        }
+
+        /// <summary>
+        /// Appends a list to another one without ordering.
+        /// </summary>
+        /// <remarks>This resembles LINQ's union, except it doesn't distinct.</remarks>
+        /// <param name="source">The first list.</param>
+        /// <param name="additionals">The list to append.</param>
+        /// <typeparam name="T">The type of items in the list</typeparam>
+        /// <returns>An combined version of the two enumerables.</returns>
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> source, IEnumerable<T> additionals)
+        {
+            foreach (var item in source)
+                yield return item;
+
+            foreach (var item in additionals)
+                yield return item;
+        }
+
+        /// <summary>
+        /// Flattens an enumerable and its children into a single list.
+        /// </summary>
+        /// <remarks>This is recursive unlike Delve</remarks>
+        /// <param name="source">The parent enumerable.</param>
+        /// <param name="selector">The child selector</param>
+        /// <typeparam name="T">The type of items in the enumerables.</typeparam>
+        /// <returns>A flat list</returns>
+        public static IEnumerable<T> AsFlat<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> selector)
+        {
+            if (source == null) yield break;
+
+            foreach (var entity in source)
+            {
+                yield return entity;
+
+                foreach (var child in selector(entity).AsFlat(selector))
+                    yield return child;
+            }
+        }
+
 		/// <summary>
 		/// Transforms array of structs into an array of objects.
 		/// </summary>
@@ -144,7 +199,7 @@ namespace Saber.Extensions
 
 			if (enumerable != null)
 			{
-				foreach (TItem value in enumerable)
+				foreach (var value in enumerable)
 				{
 					list.Add(value);
 				}
@@ -152,6 +207,65 @@ namespace Saber.Extensions
 
 			return list;
 		}
+
+        /// <summary>
+        /// Distinct, based on a key.
+        /// </summary>
+        /// <param name="source">The original enumerable</param>
+        /// <param name="selector">The key used to distinct.</param>
+        /// <typeparam name="T">The type of list.</typeparam>
+        /// <typeparam name="TKey">The type of key</typeparam>
+        /// <returns>A distinct version of the original source.</returns>
+        public static IEnumerable<T> Distinct<T, TKey>(this IEnumerable<T> source, Func<T, TKey> selector)
+        {
+            var set = new HashSet<TKey>();
+
+            return source.Where(x => set.Add(selector(x)))
+                          //It's important that we call ToList, since the hash set will be used more than once otherwise, giving a false result.
+                         .ToList();
+        }
+
+        /// <summary>
+        /// Returns a list of all parents and delves into the selected children.
+        /// </summary>
+        /// <remarks>This is not recursive, unlike AsFlat</remarks>
+        /// <param name="source">The original list</param>
+        /// <param name="childrenSelector">Child selector</param>
+        /// <typeparam name="T">The type of items in the list</typeparam>
+        /// <returns>A single level flat list</returns>
+        public static IEnumerable<T> Delve<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> childrenSelector)
+        {
+            if (source == null) yield break;
+            foreach (var entity in source)
+            {
+                yield return entity;
+
+                var children = childrenSelector(entity);
+                if (children == null) continue;
+
+                foreach (var child in children)
+                    yield return child;
+            }
+        }
+
+        /// <summary>
+        /// Returns a list of the parent and delves into the selected children.
+        /// </summary>
+        /// <remarks>This is not recursive, unlike AsFlat</remarks>
+        /// <param name="entity"></param>
+        /// <param name="childrenSelector">Child selector</param>
+        /// <typeparam name="T">The type of items in the list</typeparam>
+        /// <returns>A single level flat list</returns>
+        public static IEnumerable<T> Delve<T>(this T entity, Func<T, IEnumerable<T>> childrenSelector)
+        {
+            yield return entity;
+
+            var children = childrenSelector(entity);
+            if (children == null) yield break;
+
+            foreach (var child in children)
+                yield return child;
+        }
 
 		///<summary>
 		/// Counts a list, keeping in mind the check you are planning to do on it. 

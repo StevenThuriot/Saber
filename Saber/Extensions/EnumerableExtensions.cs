@@ -685,5 +685,29 @@ namespace Saber.Extensions
 			       	? null
 			       	: string.Join(delimiter, enumerable.Select(data => data.ToString()).ToArray());
 		}
+
+
+	    /// <summary>
+	    /// Produces the union of two sequences by using a certain key.
+	    /// </summary>
+	    /// 
+	    /// <returns>
+	    /// An <see cref="T:System.Collections.Generic.IEnumerable`1"/> that contains the elements from both input sequences, excluding duplicates.
+	    /// </returns>
+	    /// <param name="first">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the first set for the union.</param><param name="second">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the second set for the union.</param>
+	    /// <param name="keySelector">The key selector</param>
+	    /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+	    /// <typeparam name="TKey">The type of the key of the input sequences.</typeparam>
+	    /// <exception cref="T:System.ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+	    public static IEnumerable<TSource> Union<TSource, TKey>(this IEnumerable<TSource> first, IEnumerable<TSource> second, Func<TSource, TKey> keySelector)
+        {
+            var set = new HashSet<TKey>();
+
+            var firstFiltered = first.Where(element => set.Add(keySelector(element)));
+            var secondFiltered = second.Where(element => set.Add(keySelector(element)));
+
+            //It's important that we call ToList, since the hash set will be used more than once otherwise, giving a false result.
+            return firstFiltered.Append(secondFiltered).ToList();
+        }
 	}
 }

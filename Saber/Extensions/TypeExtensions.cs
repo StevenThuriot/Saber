@@ -74,5 +74,28 @@ namespace Saber.Extensions
 
             return IsGenericSubclassOf(type.BaseType, genericType);
         }
+
+        /// <summary>
+        /// Returns the full readable name for a type.
+        /// </summary>
+        /// <remarks>Strips out the ` tags in a generic type and turns it readable.</remarks>
+        /// <param name="type">The type to get the fullname of.</param>
+        /// <returns>A string representation for the passed type.</returns>
+        public static string GetFullName(this Type type)
+        {
+            if (type == null)
+                return string.Empty;
+
+            if (!type.IsGenericType) 
+                return type.FullName;
+
+
+
+            var fullName = type.GetGenericTypeDefinition().FullName;
+            var baseType = fullName.Substring(0, fullName.IndexOf('`'));
+            var generics = type.GetGenericArguments().Select(GetFullName).Aggregate((x, y) => x + ", " + y);
+
+            return string.Format("{0}<{1}>", baseType, generics);
+        }
 	}
 }

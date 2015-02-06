@@ -78,7 +78,7 @@ namespace Saber.Extensions
 			if (values == null)
 				return;
 
-			foreach (T item in values)
+			foreach (var item in values)
 			{
 				enumerable.AddUnique(item);
 			}
@@ -288,16 +288,16 @@ namespace Saber.Extensions
 				enumerable = enumerable.Where(wherePredicate);
 			}
 
-			int numberOfItemsToCount = checked(numberOfItems + 1);
-			int countedItems = 0;
+			var numberOfItemsToCount = checked(numberOfItems + 1);
+			var countedItems = 0;
 
-			IEnumerator<T> enumerator = enumerable.GetEnumerator();
+			var enumerator = enumerable.GetEnumerator();
 			while (enumerator.MoveNext() && countedItems < numberOfItemsToCount)
 			{
 				countedItems++;
 			}
 
-			bool returnValue = comparePredicate(countedItems);
+			var returnValue = comparePredicate(countedItems);
 
 			return returnValue;
 		}
@@ -633,7 +633,7 @@ namespace Saber.Extensions
 
 			var queue = new Queue<T>(count);
 
-			foreach (T item in source)
+			foreach (var item in source)
 			{
 				if (queue.Count == count)
 					queue.Dequeue();
@@ -641,7 +641,7 @@ namespace Saber.Extensions
 				queue.Enqueue(item);
 			}
 
-			foreach (T item in queue)
+			foreach (var item in queue)
 				yield return item;
 		}
 
@@ -659,7 +659,7 @@ namespace Saber.Extensions
 			if (source == null || predicate == null)
 				yield break;
 
-			foreach (T item in source)
+			foreach (var item in source)
 			{
 				yield return item;
 
@@ -709,5 +709,40 @@ namespace Saber.Extensions
             //It's important that we call ToList, since the hash set will be used more than once otherwise, giving a false result.
             return firstFiltered.Append(secondFiltered).ToList();
         }
+
+
+        /// <summary>
+        /// Produces the union of two sequences by using a certain key.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.IEnumerable`1"/> that contains the elements from both input sequences, excluding duplicates.
+        /// </returns>
+        /// <param name="source">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the first set for the union.</param><param name="additionals">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the second set for the union.</param>
+        /// <typeparam name="T">The type of the elements of the input sequences.</typeparam>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="source"/> or <paramref name="additionals"/> is null.</exception>
+        public static IEnumerable<T> Union<T>(this IEnumerable<T> source, params T[] additionals)
+        {
+            return Enumerable.Union(source, additionals);
+        }
+
+
+        /// <summary>
+        /// Produces the union of two sequences by using a certain key.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// An <see cref="T:System.Collections.Generic.IEnumerable`1"/> that contains the elements from both input sequences, excluding duplicates.
+        /// </returns>
+        /// <param name="first">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the first set for the union.</param><param name="second">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> whose distinct elements form the second set for the union.</param>
+        /// <param name="keySelector">The key selector</param>
+        /// <typeparam name="TSource">The type of the elements of the input sequences.</typeparam>
+        /// <typeparam name="TKey">The type of the key of the input sequences.</typeparam>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="first"/> or <paramref name="second"/> is null.</exception>
+        public static IEnumerable<TSource> Union<TSource, TKey>(this IEnumerable<TSource> first, Func<TSource, TKey> keySelector, params TSource[] second)
+        {
+            return first.Union(second, keySelector);
+        }
+
 	}
 }

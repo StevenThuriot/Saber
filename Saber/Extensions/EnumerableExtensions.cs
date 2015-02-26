@@ -514,6 +514,19 @@ namespace Saber.Extensions
 		}
 
 		/// <summary>
+		/// Selects the minimum from a list after applying a selector.
+		/// </summary>
+		/// <typeparam name="TSource">The source type.</typeparam>
+		/// <typeparam name="TResult">The result type.</typeparam>
+		/// <param name="enumerable">The original list.</param>
+		/// <param name="selector">The selector used to select items from the list.</param>
+		/// <returns>The maximum from the selected items.</returns>
+		public static TResult Min<TSource, TResult>(this IEnumerable<TSource> enumerable, Func<TSource, TResult> selector)
+		{
+			return enumerable.Select(selector).Min();
+		}
+
+		/// <summary>
 		/// Selects the maximum from a list after applying a selector.
 		/// </summary>
 		/// <typeparam name="TSource">The source type.</typeparam>
@@ -525,6 +538,58 @@ namespace Saber.Extensions
 		{
 			return enumerable.Select(selector).Max();
 		}
+
+        /// <summary>
+        /// Retrieves both min and max from a list of values.
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static MinMax<TSource> MinAndMax<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+
+            var comparer = Comparer<TSource>.Default;
+
+            TSource min, max;
+            min = max = default(TSource);
+
+            if (ReferenceEquals(null, min))
+            {
+                foreach (var x in source.Where(x => x != null))
+                {
+                    if (ReferenceEquals(null, min) || comparer.Compare(x, min) < 0)
+                        min = x;
+
+                    if (ReferenceEquals(null, min) || comparer.Compare(x, max) > 0)
+                        max = x;
+                }
+
+                return new MinMax<TSource>(min, max);
+            }
+
+            var hasValue = false;
+            foreach (var x in source)
+            {
+                if (hasValue)
+                {
+                    if (comparer.Compare(x, min) < 0)
+                        min = x;
+
+                    if (comparer.Compare(x, max) > 0)
+                        max = x;
+                }
+                else
+                {
+                    min = x;
+                    max = x;
+                    hasValue = true;
+                }
+            }
+
+            if (hasValue) return new MinMax<TSource>(min, max);
+            throw new InvalidOperationException("No Elements");
+        }
 
 		/// <summary>
 		/// Performs the passed action on each item in the enumeration.
@@ -545,6 +610,56 @@ namespace Saber.Extensions
 
 			return enumerable;
 		}
+
+        /// <summary>
+        /// Returns a value that is inbetween the min and max values of the supplied list.
+        /// </summary>
+        /// <typeparam name="T">The source type</typeparam>
+        /// <param name="value">The value to check</param>
+        /// <param name="values">The source of values used for min and max (inclusive)</param>
+        /// <returns>A value between min and max</returns>
+        public static T InBetween<T>(this T value, IEnumerable<T> values)
+        {
+            var minAndMax = values.MinAndMax();
+            return value.InBetween(minAndMax);
+        }
+
+
+        /// <summary>
+        /// Returns a value that is inbetween the min and max values.
+        /// </summary>
+        /// <typeparam name="T">The source type</typeparam>
+        /// <param name="value">The value to check</param>
+        /// <param name="minAndMax">The minimum and maximum value (inclusive)</param>
+        /// <returns>A value between min and max</returns>
+        public static T InBetween<T>(this T value, MinMax<T> minAndMax)
+	    {
+            var min = minAndMax.Min;
+            var max = minAndMax.Max;
+
+            return value.InBetween(min, max);
+	    }
+
+        /// <summary>
+        /// Returns a value that is inbetween the min and max values.
+        /// </summary>
+        /// <typeparam name="T">The source type</typeparam>
+        /// <param name="value">The value to check</param>
+        /// <param name="min">The minimum value (inclusive)</param>
+        /// <param name="max">The maximum value (inclusive)</param>
+        /// <returns>A value between min and max</returns>
+        public static T InBetween<T>(this T value, T min, T max)
+        {
+            var comparer = Comparer<T>.Default;
+
+            if (comparer.Compare(value, min) <= 0)
+                return min;
+
+            if (comparer.Compare(value, max) >= 0)
+                return max;
+
+            return value;
+        }
 
 		/// <summary>
 		/// Skips items from the input sequence until the given predicate returns true

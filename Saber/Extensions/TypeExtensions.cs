@@ -56,26 +56,29 @@ namespace Saber.Extensions
 			return type.GetCustomAttributes(typeof(T), inherited).OfType<T>().AsReadOnly();
 		}
 
-        /// <summary>
-        /// Determines whether the passed type of a generic subclass of the generic type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="genericType">Type of the generic.</param>
-        /// <returns>
-        ///   <c>true</c> if the passed type of a generic subclass of the generic type.; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool IsGenericSubclassOf(this Type type, Type genericType)
-        {
-            if (type == null)
-                return false;
+	    /// <summary>
+	    /// Determines whether the passed type of a generic subclass of the generic type.
+	    /// </summary>
+	    /// <param name="type">The type.</param>
+	    /// <param name="genericType">Type of the generic.</param>
+	    /// <returns>
+	    ///   <c>true</c> if the passed type of a generic subclass of the generic type.; otherwise, <c>false</c>.
+	    /// </returns>
+	    public static bool IsGenericSubclassOf(this Type type, Type genericType)
+	    {
+	        while (true)
+	        {
+	            if (type == null)
+	                return false;
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition() == genericType)
-                return true;
+	            if (type.IsGenericType && type.GetGenericTypeDefinition() == genericType)
+	                return true;
 
-            return IsGenericSubclassOf(type.BaseType, genericType);
-        }
+	            type = type.BaseType;
+	        }
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Returns the full readable name for a type.
         /// </summary>
         /// <remarks>Strips out the ` tags in a generic type and turns it readable.</remarks>
@@ -96,6 +99,32 @@ namespace Saber.Extensions
             var generics = type.GetGenericArguments().Select(GetFullName).Aggregate((x, y) => x + ", " + y);
 
             return string.Format("{0}<{1}>", baseType, generics);
+        }
+
+        /// <summary>
+        /// Unwraps the element type from a generic IEnumerable type.
+        /// </summary>
+        /// <param name="type">The type to unwrap</param>
+        /// <returns>The generic type</returns>
+        /// <remarks>
+        /// - A string will return as string rather than IEnumerable of char.
+        /// - If the type is not IEnumerable, the original type will be returned (hence 'if possible')
+        /// </remarks>
+        public static Type UnwrapEnumerableIfPossible(this Type type)
+        {
+            if (type == typeof(string))
+                return type;
+
+            var enumerable = typeof(IEnumerable<>);
+
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == enumerable)
+                return type.GetGenericArguments().First();
+
+            var enumerableInterface = type.GetInterface(enumerable.Name);
+            if (enumerableInterface == null)
+                return type;
+
+            return enumerableInterface.GetGenericArguments().First();
         }
 	}
 }

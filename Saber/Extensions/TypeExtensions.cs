@@ -16,6 +16,7 @@
 // 
 #endregion
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -99,6 +100,51 @@ namespace Saber.Extensions
             var generics = type.GetGenericArguments().Select(GetFullName).Aggregate((x, y) => x + ", " + y);
 
             return string.Format("{0}<{1}>", baseType, generics);
+        }
+
+        /// <summary>
+        /// Checks if a given type is an enumerable type.
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>True if enumerable.</returns>
+        public static bool IsEnumerable(this Type type)
+        {
+            var enumerableType = typeof(IEnumerable);
+            if (type == enumerableType) return true;
+
+            var enumerableInterface = type.GetInterface(enumerableType.FullName);
+            return enumerableInterface != null;
+        }
+
+	    /// <summary>
+	    /// Checks if a given type is a generic enumerable type.
+	    /// </summary>
+	    /// <param name="type">The type</param>
+	    /// <param name="enumerableOf">The generic.</param>
+	    /// <returns>True if enumerable.</returns>
+	    public static bool IsEnumerable(this Type type, out Type enumerableOf)
+        {
+            var enumerableType = typeof(IEnumerable<>);
+
+            if (type.IsGenericType && type.IsInterface)
+            {
+                if (type.GetGenericTypeDefinition() == enumerableType)
+                {
+                    enumerableOf = type.GetGenericArguments().First();
+                    return true;
+                }
+            }
+
+            var enumerableInterface = type.GetInterface(enumerableType.FullName);
+
+            if (enumerableInterface != null)
+            {
+                enumerableOf = enumerableInterface.GetGenericArguments().First();
+                return true;
+            }
+
+            enumerableOf = null;
+            return false;
         }
 
         /// <summary>

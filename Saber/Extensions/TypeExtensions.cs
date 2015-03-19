@@ -102,6 +102,26 @@ namespace Saber.Extensions
             return string.Format("{0}<{1}>", baseType, generics);
         }
 
+	    /// <summary>
+	    /// Returns the full readable name for a type.
+	    /// </summary>
+	    /// <remarks>Strips out the ` tags in a generic type and turns it readable.</remarks>
+	    /// <param name="type">The type to get the fullname of.</param>
+	    /// <param name="generics">Instead of the actual generics, it uses the (correct amount) of passed generics instead.</param>
+	    /// <returns>A string representation for the passed type.</returns>
+	    public static string GetFullName(this Type type, params string[] generics)
+        {
+            if (type.IsGenericType)
+            {
+                var fullName = type.GetGenericTypeDefinition().FullName;
+                var baseType = fullName.Substring(0, fullName.IndexOf('`'));
+                var genericCount = type.GetGenericArguments().Length;
+                return string.Format("{0}<{1}>", baseType, string.Join(", ", generics.Take(genericCount).ToArray()));
+            }
+
+            return type.FullName;
+        }
+
         /// <summary>
         /// Checks if a given type is an enumerable type.
         /// </summary>

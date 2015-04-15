@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Saber.Helpers;
 
 namespace Saber.Extensions
@@ -160,10 +161,29 @@ namespace Saber.Extensions
 		[SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
 		public static string ToTitleCase(this string value)
 		{
-			return value.IsNullOrWhiteSpace()
-			       	? value
-			       	: CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value.ToLowerInvariant());
+		    if (value.IsNullOrWhiteSpace()) return value;
+
+		    var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(textInfo.ToLower(value));
 		}
+
+
+	    private static readonly Regex _sentenceRegex = new Regex(@"(?<capitalize>^[a-z])|[\.\!\?]\s*(?<capitalize>[a-z])", RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
+        ///<summary>
+        /// Turns a string into a sentence cased one.
+        ///</summary>
+        ///<param name="value">The string that needs to be sentence cased.</param>
+        ///<returns>The sentence cased string</returns>
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+        public static string ToSentenceCase(this string value)
+        {
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            var lowerCase = textInfo.ToLower(value);
+            var result = _sentenceRegex.Replace(lowerCase, s => textInfo.ToUpper(s.Groups["capitalize"].Value));
+
+            return result;
+        }
 
 		/// <summary>
 		/// Convert the string to an enum of the given type
